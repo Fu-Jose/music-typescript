@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import MainPage from "./components/MainPage";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Data } from "./types/types";
+interface AppState {
+  data: Data[];
+}
+class App extends Component<{}, AppState> {
+  state: AppState = {
+    data: [],
+  };
+
+  async componentDidMount() {
+    const data = await fetch(
+      "https://striveschool-api.herokuapp.com/api/deezer/search?q=whatever"
+    );
+    const response = await data.json();
+    console.log(response);
+    this.setState({ data: response });
+  }
+  render() {
+    return <MainPage data={this.state.data}></MainPage>;
+  }
 }
 
 export default App;
